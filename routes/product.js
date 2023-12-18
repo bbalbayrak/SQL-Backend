@@ -13,7 +13,7 @@ const isAuth = require("../middlewares/isAuth");
 const router = express.Router();
 
 //BUTUN URUNLERI KATEGORIYE GORE LISTELEME
-router.get("/products/:categoryId", isAuth, getAllProducts);
+router.get("/products/:categoryId", getAllProducts);
 
 //URUN DETAYLARINI GORME
 router.get("/product/:productId", isAuth, productDetails);
