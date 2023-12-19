@@ -31,6 +31,17 @@ const Comments = {
     return result;
   },
 
+  findComment: async (comment_id) => {
+    const result = await db.oneOrNone(
+      "SELECT * FROM ${table:name} WHERE comment_id = ${comment_id}",
+      {
+        table: Comments.tableName,
+        comment_id,
+      }
+    );
+    return result;
+  },
+
   createComment: async (customer_id, comment_text, product_id) => {
     const result = await db.one(
       `INSERT INTO ${Comments.tableName} (customer_id,comment_text,product_id) VALUES ($1,$2,$3) RETURNING *`,

@@ -17,7 +17,7 @@ router.post("/createOrder", isAuth, createOrder);
 router.post("/addProduct/:orderId/:productId", isAuth, addProductToCard);
 
 //SEPETI GUNCELLEME
-router.post("/updateCart/:orderId/:productId", isAuth, updateCart);
+// router.post("/updateCart/:orderId/:productId", isAuth, updateCart);
 
 //URUNU SEPETTEN SILME
 router.delete(
