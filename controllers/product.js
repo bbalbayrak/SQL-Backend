@@ -62,3 +62,11 @@ exports.createProductComment = async (req, res, next) => {
     .status(201)
     .json({ message: "Comment Successfully created !", comment: newComment });
 };
+
+exports.discountedProducts = async (req, res, next) => {
+  const discountedProducts = await Product.findByDiscountedProducts();
+
+  return res
+    .status(200)
+    .json({ message: "Discounted Products !", products: discountedProducts });
+};

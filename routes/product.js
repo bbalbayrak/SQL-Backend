@@ -4,6 +4,7 @@ const {
   productComments,
   productDetails,
   createProductComment,
+  discountedProducts,
 } = require("../controllers/product");
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
@@ -24,12 +25,15 @@ router.get("/productComments/:productId", isAuth, productComments);
 //URUN YORUMU OLUSTURMA
 router.post("/createProductComment/:productId", isAuth, createProductComment);
 
+//INDIRIMI OLAN URUNLERI GETIRME
+router.get("/discountProducts", isAuth, discountedProducts);
+
 //URUN OLUSTURMA
 router.post(
   "/createProduct",
   upload.single("product_image"),
   async (req, res, next) => {
-    const { product_name, price, category_id } = req.body;
+    const { product_name, price, category_id, code_id } = req.body;
     const product_image = req.file.path; // Dosyanın yolu (multer ile otomatik olarak eklenir)
 
     try {
@@ -37,7 +41,8 @@ router.post(
         product_name,
         price,
         product_image,
-        category_id
+        category_id,
+        code_id
       );
       return res
         .status(201)

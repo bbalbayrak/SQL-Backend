@@ -8,12 +8,13 @@ const Product = {
     price: "price",
     product_image: "product_image",
     category_id: "category_id",
+    code_id: "code_id",
   },
 
-  create: async (product_name, price, product_image, category_id) => {
+  create: async (product_name, price, product_image, category_id, code_id) => {
     const result = await db.one(
-      `INSERT INTO ${Product.tableName} (product_name,price,product_image,category_id) VALUES ($1,$2,$3,$4) RETURNING *`,
-      [product_name, price, product_image, category_id]
+      `INSERT INTO ${Product.tableName} (product_name,price,product_image,category_id,code_id) VALUES ($1,$2,$3,$4,$5) RETURNING *`,
+      [product_name, price, product_image, category_id, code_id]
     );
     return result;
   },
@@ -33,6 +34,14 @@ const Product = {
         table: Product.tableName,
         category_id,
       }
+    );
+    return result;
+  },
+
+  findByDiscountedProducts: async () => {
+    const result = await db.manyOrNone(
+      `SELECT * FROM ${Product.tableName}
+        WHERE code_id IS NOT NULL;`
     );
     return result;
   },
