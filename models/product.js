@@ -28,7 +28,7 @@ const Product = {
   },
 
   findByCategories: async (category_id) => {
-    const result = await db.oneOrNone(
+    const result = await db.manyOrNone(
       "SELECT * FROM ${table:name} WHERE category_id = ${category_id}",
       {
         table: Product.tableName,
