@@ -21,48 +21,88 @@ const OrderDetails = {
     return result;
   },
 
-  addProduct: async (order_id, product_id, quantity, price) => {
-    // İndirim kodunu al
-    const discountCode = await db.oneOrNone(
-      `SELECT code_id
-    FROM Products
-    WHERE product_id = $1;`,
-      [product_id]
-    );
+  addProduct: async (order_id, product_id, quantity) => {
+    try {
+      // İlgili ürünün fiyatını ve indirim kodunu al
+      const productInfo = await db.one(
+        `SELECT p.price, dc.discount_rate
+         FROM Products p
+         LEFT JOIN DiscountCodes dc ON p.code_id = dc.code_id
+         WHERE p.product_id = $1;`,
+        [product_id]
+      );
 
-    // İndirim kodu varsa
-    if (discountCode) {
-      try {
-        // İndirim oranını al
-        const discountRate = await db.one(
-          `SELECT discount_rate
-        FROM DiscountCodes
-        WHERE code_id = $1;`,
-          [discountCode.code_id]
-        );
+      let { price, discount_rate } = productInfo;
 
-        // İndirim oranını kullanarak fiyatı güncelle
-        if (discountRate) {
-          price = price * (1 - discountRate.discount_rate);
-        }
-      } catch (error) {
-        console.error(error);
+      // İndirim oranını kullanarak fiyatı güncelle
+      if (discount_rate) {
+        price = price * (1 - discount_rate);
       }
-    }
-    // Geri kalan işlemler
-    const result = await db.one(
-      `INSERT INTO ${OrderDetails.tableName} (order_id, product_id, quantity, price)
-      VALUES ($1, $2, $3, $4)
-      ON CONFLICT (order_id, product_id)
-      DO UPDATE SET
-          quantity = ${OrderDetails.tableName}.quantity + $3,
-          price = ${OrderDetails.tableName}.price + $4
-      RETURNING *;`,
-      [order_id, product_id, quantity, price]
-    );
 
-    return result;
+      // Geri kalan işlemler
+      const result = await db.one(
+        `INSERT INTO ${OrderDetails.tableName} (order_id, product_id, quantity, price)
+        VALUES ($1, $2, $3, $4)
+        ON CONFLICT (order_id, product_id)
+        DO UPDATE SET
+            quantity = ${OrderDetails.tableName}.quantity + $3,
+            price = ${OrderDetails.tableName}.price + $4
+        RETURNING *;
+        `,
+        [order_id, product_id, quantity, price]
+      );
+
+      // result içerisinde eklenen veya güncellenen ürün bilgileri bulunabilir
+      return result;
+    } catch (error) {
+      console.error(error);
+      // Hata durumunda uygun bir işlem yapabilirsiniz
+      throw error;
+    }
   },
+
+  // addProduct: async (order_id, product_id, quantity, price) => {
+  //   // İndirim kodunu al
+  //   const discountCode = await db.oneOrNone(
+  //     `SELECT code_id
+  //   FROM Products
+  //   WHERE product_id = $1;`,
+  //     [product_id]
+  //   );
+
+  //   // İndirim kodu varsa
+  //   if (discountCode) {
+  //     try {
+  //       // İndirim oranını al
+  //       const discountRate = await db.one(
+  //         `SELECT discount_rate
+  //       FROM DiscountCodes
+  //       WHERE code_id = $1;`,
+  //         [discountCode.code_id]
+  //       );
+
+  //       // İndirim oranını kullanarak fiyatı güncelle
+  //       if (discountRate) {
+  //         price = price * (1 - discountRate.discount_rate);
+  //       }
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   }
+  //   // Geri kalan işlemler
+  //   const result = await db.one(
+  //     `INSERT INTO ${OrderDetails.tableName} (order_id, product_id, quantity, price)
+  //     VALUES ($1, $2, $3, $4)
+  //     ON CONFLICT (order_id, product_id)
+  //     DO UPDATE SET
+  //         quantity = ${OrderDetails.tableName}.quantity + $3,
+  //         price = ${OrderDetails.tableName}.price + $4
+  //     RETURNING *;`,
+  //     [order_id, product_id, quantity, price]
+  //   );
+
+  //   return result;
+  // },
 
   //   addProduct: async (order_id, product_id, quantity, price) => {
   //     const result = await db.one(

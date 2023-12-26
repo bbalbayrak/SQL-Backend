@@ -15,21 +15,16 @@ exports.addProductToCard = async (req, res, next) => {
   const orderId = req.params.orderId;
   const quantity = "1";
 
-  const isOrderExist = await Orders.findOrderExist(orderId);
+  // const isOrderExist = await Orders.findOrderExist(orderId);
 
-  if (!isOrderExist) {
-    return res.status(404).json({ message: "Order can not be found !" });
-  }
-
-  const product = await Product.getProductDetails(productId);
-
-  const productPrice = product.price;
+  // if (!isOrderExist) {
+  //   return res.status(404).json({ message: "Order can not be found !" });
+  // }
 
   const addedNewProducts = await OrderDetails.addProduct(
     orderId,
     productId,
-    quantity,
-    productPrice
+    quantity
   );
 
   return res
