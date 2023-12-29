@@ -23,16 +23,16 @@ const OrderDetails = {
 
   addProduct: async (order_id, product_id, quantity) => {
     try {
-      // İlgili ürünün fiyatını ve indirim kodunu al
+      // İlgili ürünün fiyatını, indirim kodunu ve ismini al
       const productInfo = await db.one(
-        `SELECT p.price, dc.discount_rate
+        `SELECT p.price, dc.discount_rate, p.product_name
          FROM Products p
          LEFT JOIN DiscountCodes dc ON p.code_id = dc.code_id
          WHERE p.product_id = $1;`,
         [product_id]
       );
 
-      let { price, discount_rate } = productInfo;
+      let { price, discount_rate, product_name } = productInfo;
 
       // İndirim oranını kullanarak fiyatı güncelle
       if (discount_rate) {
@@ -41,15 +41,15 @@ const OrderDetails = {
 
       // Geri kalan işlemler
       const result = await db.one(
-        `INSERT INTO ${OrderDetails.tableName} (order_id, product_id, quantity, price)
-        VALUES ($1, $2, $3, $4)
+        `INSERT INTO ${OrderDetails.tableName} (order_id, product_id, quantity, price, product_name)
+        VALUES ($1, $2, $3, $4, $5)
         ON CONFLICT (order_id, product_id)
         DO UPDATE SET
             quantity = ${OrderDetails.tableName}.quantity + $3,
             price = ${OrderDetails.tableName}.price + $4
         RETURNING *;
         `,
-        [order_id, product_id, quantity, price]
+        [order_id, product_id, quantity, price, product_name]
       );
 
       // result içerisinde eklenen veya güncellenen ürün bilgileri bulunabilir
