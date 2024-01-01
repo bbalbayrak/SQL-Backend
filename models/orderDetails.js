@@ -150,10 +150,29 @@ const OrderDetails = {
   },
 
   deleteProductFromCart: async (product_id) => {
-    await db.none(
-      `DELETE FROM ${OrderDetails.tableName} WHERE product_id = $1`,
+    const result = await db.oneOrNone(
+      `
+      UPDATE ${OrderDetails.tableName}
+      SET quantity = quantity - 1
+      WHERE product_id = $1 AND quantity > 1
+      RETURNING *
+      `,
       [product_id]
     );
+
+    if (!result) {
+      // Eğer ürünün quantity değeri 1 ise, tamamen sil
+      await db.oneOrNone(
+        `
+        DELETE FROM ${OrderDetails.tableName}
+        WHERE product_id = $1 AND quantity = 1
+        RETURNING *
+        `,
+        [product_id]
+      );
+    }
+
+    return result;
   },
 };
 
