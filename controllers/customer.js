@@ -26,6 +26,7 @@ exports.signup = async (req, res, next) => {
 //GIRIS YAPMA
 exports.login = async (req, res, next) => {
   const { email, password } = req.body;
+  console.log(email, password);
 
   const existingCustomer = await Customer.findByEmail(email);
 

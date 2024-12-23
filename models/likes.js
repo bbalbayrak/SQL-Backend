@@ -34,14 +34,14 @@ const Likes = {
 
   getMaxLikedComment: async () => {
     const result = await db.oneOrNone(
-      `SELECT C.*, COUNT(L.like_id) AS like_count
-            FROM ${Comment.tableName} C
-            LEFT JOIN ${Likes.tableName} L ON C.comment_id = L.comment_id
-            GROUP BY C.comment_id
-            ORDER BY like_count DESC
-            LIMIT 1;`
-    );
-    return result;
+        `SELECT C.comment_id, COUNT(L.like_id) AS like_count
+     FROM ${Comment.tableName} C
+     LEFT JOIN ${Likes.tableName} L ON C.comment_id = L.comment_id
+     GROUP BY C.comment_id
+     ORDER BY like_count DESC
+     LIMIT 1;`
+      );
+      return result;
   },
 };
 module.exports = Likes;
