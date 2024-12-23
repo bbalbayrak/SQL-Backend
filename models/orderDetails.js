@@ -31,7 +31,6 @@ const OrderDetails = {
          WHERE p.product_id = $1;`,
         [product_id]
       );
-
       let { price, discount_rate, product_name } = productInfo;
 
       // İndirim oranını kullanarak fiyatı güncelle
