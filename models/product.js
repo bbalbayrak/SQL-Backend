@@ -27,8 +27,24 @@ const Product = {
 
     getProductDetails: async (id) => {
         const result = await db.oneOrNone(
-            'SELECT * FROM ${table:name} WHERE product_id = ${id}',
-            { table: Product.tableName, id }
+            `
+          SELECT 
+            p.product_id AS product_id,
+            p.product_name AS product_name,
+            p.price AS product_price,
+            c.category_id AS category_id,
+            c.category_name AS category_name,
+            d.code_id AS discount_code_id,
+            d.code AS discount_code,
+            d.discount_rate AS discount_rate
+          FROM products p
+          LEFT JOIN categories c
+          ON p.category_id = c.category_id
+          LEFT JOIN discountcodes d
+          ON p.code_id = d.code_id
+          WHERE p.product_id = $1
+          `,
+            [id] 
         );
         return result;
     },
