@@ -13,23 +13,24 @@ const Comments = {
     findProductComments: async (product_id) => {
         const result = await db.manyOrNone(
             `
-      SELECT 
-        c.comment_id AS comment_id,
-        c.comment_text,
-        c.product_id,
-        cu.customer_id AS customer_id,
-        cu.name AS customer_name,
-        cu.email AS customer_email,
-        cu.phone AS customer_phone
-      FROM ${Comments.tableName} c
-      JOIN ${Customers.tableName} cu
-      ON c.customer_id = cu.customer_id
-      WHERE c.product_id = ${product_id}
-      `,
-            {
-                table: Comments.tableName,
-                product_id,
-            }
+          SELECT 
+            c.comment_id AS comment_id,
+            c.comment_text,
+            c.product_id,
+            cu.customer_id AS customer_id,
+            cu.name AS customer_name,
+            cu.email AS customer_email,
+            cu.phone AS customer_phone,
+            COUNT(l.like_id) AS like_count
+          FROM comments c
+          JOIN customers cu
+            ON c.customer_id = cu.customer_id
+          LEFT JOIN likes l
+            ON c.comment_id = l.comment_id
+          WHERE c.product_id = $1
+          GROUP BY c.comment_id, cu.customer_id, cu.name, cu.email, cu.phone
+          `,
+            [product_id]
         );
         return result;
     },

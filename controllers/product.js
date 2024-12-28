@@ -34,6 +34,7 @@ exports.getProducts = async (req, res, next) => {
 
 exports.productDetails = async (req, res, next) => {
     const productId = req.params.productId;
+
     const product = await Product.getProductDetails(productId);
 
     if (!product) {
