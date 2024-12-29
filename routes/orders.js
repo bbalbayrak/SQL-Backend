@@ -9,6 +9,8 @@ const {
   getOldorders,
   confirmOrder,
   getOldOrderDetails,
+  createPayment,
+  getPayments,
 } = require("../controllers/orders");
 const express = require("express");
 const router = express.Router();
@@ -43,5 +45,11 @@ router.get("/oldOrderDetails/:oldOrderId", isAuth, getOldOrderDetails);
 
 //SIPARIS ONAYLAMA
 router.post("/confirmOrder/:orderId", isAuth, confirmOrder);
+
+//ODEME YAPMA
+router.post("/payments/:orderId", isAuth, createPayment);
+
+//ODEMELERI GETIRME
+router.get("/getPayments/:orderId", isAuth, getPayments);
 
 module.exports = router;

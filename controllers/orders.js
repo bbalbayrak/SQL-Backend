@@ -2,6 +2,7 @@ const Orders = require("../models/orders");
 const OrderDetails = require("../models/orderDetails");
 const Product = require("../models/product");
 const oldOrders = require("../models/oldOrders");
+const Payments = require("../models/payment");
 
 exports.createOrder = async (req, res, next) => {
   const customerId = req.customerId;
@@ -120,4 +121,29 @@ exports.confirmOrder = async (req, res, next) => {
   const data = await Orders.confirmOrder(orderId);
 
   return res.status(200).json({ data: data, message: "Order confirmed !" });
+};
+
+exports.createPayment = async (req, res, next) => {
+  const orderId = req.params.orderId;
+  const customerId = req.customerId;
+  const shippingAddress = req.body.shippingAddress;
+  const carrierId = req.body.carrierId;
+
+  const payment = await Payments.createPayment(
+    orderId,
+    customerId,
+    shippingAddress,
+    carrierId
+  );
+
+  return res
+    .status(201)
+    .json({ message: "Payment created !", payment: payment });
+};
+
+exports.getPayments = async (req, res, next) => {
+  const orderId = req.params.orderId;
+  const payments = await Payments.getPayment(orderId);
+
+  return res.status(200).json({ message: "Payments fetched !", payments });
 };
