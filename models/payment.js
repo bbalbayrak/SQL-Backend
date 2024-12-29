@@ -28,8 +28,22 @@ const Payments = {
     },
 
     getPayment: async (user_id) => {
-        const result = await db.oneOrNone(
-            `SELECT * FROM ${Payments.tableName} WHERE customer_id = $1`,
+        const result = await db.any(
+            `SELECT 
+                p.carrier_id,
+                p.shipping_address,
+                o.product_name,
+                o.price,
+                o.quantity,
+                o.order_id
+            FROM 
+                payment p
+            JOIN 
+                order_details o
+            ON 
+                p.order_id = o.order_id
+            WHERE 
+                p.customer_id = $1`,
             [user_id]
         );
         return result;

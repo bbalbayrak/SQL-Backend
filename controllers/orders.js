@@ -142,9 +142,39 @@ exports.createPayment = async (req, res, next) => {
 };
 
 exports.getPayments = async (req, res, next) => {
-  const customerId = req.customerId;
-  console.log(customerId);
-  const payments = await Payments.getPayment(customerId);
-
-  return res.status(200).json({ message: "Payments fetched !", payments });
-};
+    const customerId = req.customerId;
+    console.log(customerId);
+    try {
+      const payments = await Payments.getPayment(customerId);
+  
+      const groupedPayments = payments.reduce((acc, payment) => {
+        const { order_id } = payment;
+        if (!acc[order_id]) {
+          acc[order_id] = {
+            order_id,
+            carrier_id: payment.carrier_id,
+            shipping_address: payment.shipping_address,
+            items: [],
+          };
+        }
+  
+        acc[order_id].items.push({
+          product_name: payment.product_name,
+          price: payment.price,
+          quantity: payment.quantity,
+        });
+  
+        return acc;
+      }, {});
+  
+      const groupedPaymentsArray = Object.values(groupedPayments);
+  
+      return res
+        .status(200)
+        .json({ message: "Payments fetched!", payments: groupedPaymentsArray });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "An error occurred!" });
+    }
+  };
+  
