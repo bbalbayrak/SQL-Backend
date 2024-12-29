@@ -50,6 +50,6 @@ router.post("/confirmOrder/:orderId", isAuth, confirmOrder);
 router.post("/payments/:orderId", isAuth, createPayment);
 
 //ODEMELERI GETIRME
-router.get("/getPayments/:orderId", isAuth, getPayments);
+router.get("/getPayments", isAuth, getPayments);
 
 module.exports = router;

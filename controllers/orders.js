@@ -142,8 +142,9 @@ exports.createPayment = async (req, res, next) => {
 };
 
 exports.getPayments = async (req, res, next) => {
-  const orderId = req.params.orderId;
-  const payments = await Payments.getPayment(orderId);
+  const customerId = req.customerId;
+  console.log(customerId);
+  const payments = await Payments.getPayment(customerId);
 
   return res.status(200).json({ message: "Payments fetched !", payments });
 };
