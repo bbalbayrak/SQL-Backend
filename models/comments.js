@@ -37,11 +37,20 @@ const Comments = {
 
     findCustomerComments: async (customer_id) => {
         const result = await db.manyOrNone(
-            'SELECT * FROM ${table:name} WHERE customer_id = ${customer_id}',
-            {
-                table: Comments.tableName,
-                customer_id,
-            }
+            `
+            SELECT 
+                c.comment_text, 
+                p.product_name
+            FROM 
+                comments c
+            INNER JOIN 
+                products p 
+            ON 
+                c.product_id = p.product_id
+            WHERE 
+                c.customer_id = $1
+            `,
+            [customer_id]
         );
         return result;
     },

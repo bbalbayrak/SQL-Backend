@@ -33,6 +33,7 @@ const Product = {
             p.product_name AS product_name,
             p.price AS product_price,
             p.product_image AS product_image,
+            p.star AS product_star,
             c.category_id AS category_id,
             c.category_name AS category_name,
             d.code_id AS discount_code_id,
