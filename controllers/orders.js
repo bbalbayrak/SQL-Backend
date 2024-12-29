@@ -1,6 +1,7 @@
 const Orders = require("../models/orders");
 const OrderDetails = require("../models/orderDetails");
 const Product = require("../models/product");
+const oldOrders = require("../models/oldOrders");
 
 exports.createOrder = async (req, res, next) => {
   const customerId = req.customerId;
@@ -92,4 +93,31 @@ exports.deleteOrder = async (req, res, next) => {
     message: "Order successfully deleted !",
     deletedOrder: deletedOrder,
   });
+};
+
+exports.getOldorders = async (req, res, next) => {
+  const customerId = req.customerId;
+  const oldOrder = await oldOrders.findAllOldOrdersByCustomerId(customerId);
+
+  return res
+    .status(200)
+    .json({ message: "Old Orders fetched !", oldOrders: oldOrder });
+};
+
+exports.getOldOrderDetails = async (req, res, next) => {
+  const oldOrderId = req.params.oldOrderId;
+
+  const oldOrderDetails = await oldOrders.getOldOrderDetails(oldOrderId);
+
+  return res
+    .status(200)
+    .json({ message: "Old Order details fetched !", data: oldOrderDetails });
+};
+
+exports.confirmOrder = async (req, res, next) => {
+  const orderId = req.params.orderId;
+
+  const data = await Orders.confirmOrder(orderId);
+
+  return res.status(200).json({ data: data, message: "Order confirmed !" });
 };

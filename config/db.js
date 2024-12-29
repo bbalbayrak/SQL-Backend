@@ -1,12 +1,12 @@
-const pgp = require('pg-promise')();
-require('dotenv').config();
+const pgp = require("pg-promise")();
+require("dotenv").config();
 
 const connection = {
-    host: 'localhost',
-    port: '5432',
-    database: 'deneme2',
-    user: 'postgres',
-    password: process.env.PASSWORD
+  host: "localhost",
+  port: "5432",
+  database: "deneme2",
+  user: "postgres",
+  password: "admin",
 };
 
 const db = pgp(connection);
