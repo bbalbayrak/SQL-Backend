@@ -5,13 +5,12 @@ import { PeriodicExportingMetricReader } from "@opentelemetry/sdk-metrics";
 import { getNodeAutoInstrumentations } from "@opentelemetry/auto-instrumentations-node";
 import { resourceFromAttributes } from "@opentelemetry/resources";
 
-const QOMMITY_HEADERS = {
-  "X-Qommity-Key":
-    "qom_sk_225c577474ba447eba58f3f61e0819ba2ebdba95a0958cfdd5dbf7e1e89c4f4c",
-};
+const QOMMITY_HEADERS = { "X-Qommity-Key": "<your-server-key>" };
 
 const sdk = new NodeSDK({
-  resource: resourceFromAttributes({ "service.name": "test api-production" }),
+  resource: resourceFromAttributes({
+    "service.name": "SQL-Backend-Test-development",
+  }),
   traceExporter: new OTLPTraceExporter({
     url: "http://localhost:3001/api/ingest/v1/traces",
     headers: QOMMITY_HEADERS,
