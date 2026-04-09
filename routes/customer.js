@@ -12,6 +12,12 @@ const isAuth = require("../middlewares/isAuth");
 const express = require("express");
 const router = express.Router();
 
+router.get("/test", (req, res, next) => {
+  console.log("Customer Route is working !");
+  throw error("Test error in customer route");
+  return res.status(200).json({ message: "Customer Route is working !" });
+});
+
 //KAYIT OLMA
 router.post("/signUp", signup);
 

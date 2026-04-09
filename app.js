@@ -13,6 +13,6 @@ app.use("/auth", customerRoutes);
 app.use(productRoutes);
 app.use(orderRoutes);
 
-app.listen(3000, () => {
+app.listen(5000, () => {
   console.log("listening port on 3000");
 });
