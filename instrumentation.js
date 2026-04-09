@@ -5,7 +5,10 @@ import { PeriodicExportingMetricReader } from "@opentelemetry/sdk-metrics";
 import { getNodeAutoInstrumentations } from "@opentelemetry/auto-instrumentations-node";
 import { resourceFromAttributes } from "@opentelemetry/resources";
 
-const QOMMITY_HEADERS = { "X-Qommity-Key": "<your-server-key>" };
+const QOMMITY_HEADERS = {
+  "X-Qommity-Key":
+    "qom_sk_4288c038648a5c88662bfc2b4e830a5f08c027aeb738cd7d7d43034970745d5d",
+};
 
 const sdk = new NodeSDK({
   resource: resourceFromAttributes({
