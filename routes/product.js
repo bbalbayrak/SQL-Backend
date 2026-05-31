@@ -10,6 +10,7 @@ const {
 } = require("../controllers/product");
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
+//merge testing
 
 const express = require("express");
 const isAuth = require("../middlewares/isAuth");
