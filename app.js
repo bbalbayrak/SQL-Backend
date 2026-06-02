@@ -13,6 +13,7 @@ app.use("/auth", customerRoutes);
 app.use(productRoutes);
 app.use(orderRoutes);
 
+//testing auto merge
 app
   .listen(3000, () => {
     console.log("listening port on 3000");
