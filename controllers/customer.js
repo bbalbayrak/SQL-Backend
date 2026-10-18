@@ -11,7 +11,7 @@ exports.signup = async (req, res, next) => {
     const existingCustomer = await Customer.findByEmail(email);
 
     if (existingCustomer) {
-        return res.status(400).json({ message: 'Customer already exist' });
+        return res.status(409).json({ message: 'Email already registered (PR-E)' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
@@ -47,7 +47,7 @@ exports.login = async (req, res, next) => {
     );
 
     if (!matchPassword) {
-        return res.status(400).json({ message: 'Wrong Password !' });
+        return res.status(401).json({ message: 'Invalid credentials (PR-E)' });
     }
 
     const token = JWT.sign(
@@ -88,7 +88,7 @@ exports.changePassword = async (req, res, next) => {
     );
 
     return res.status(201).json({
-        message: 'Password Successfully Changed!',
+        message: 'Password updated (PR-E)',
         newPassword: newPassword,
     });
 };
@@ -132,7 +132,7 @@ exports.deleteLike = async (req, res, next) => {
 
     await Likes.deleteLike(customerId, commentId);
 
-    return res.status(200).json({ message: 'Deleted Liked Comment !' });
+    return res.status(200).json({ message: 'Like removed (PR-E)' });
 };
 
 exports.filteredMaxLikedComment = async (req, res, next) => {

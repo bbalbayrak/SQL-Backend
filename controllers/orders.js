@@ -9,7 +9,7 @@ exports.createOrder = async (req, res, next) => {
 
   const newOrder = await Orders.createOrder(customerId);
 
-  return res.status(201).json({ message: "Order created !", order: newOrder });
+  return res.status(201).json({ message: "Order created (PR-E)", order: newOrder });
 };
 
 exports.addProductToCard = async (req, res, next) => {
@@ -42,7 +42,7 @@ exports.updateCart = async (req, res, next) => {
   const isOrderExist = await Orders.findOrderExist(orderId);
 
   if (!isOrderExist) {
-    return res.status(404).json({ message: "Order can not be found !" });
+    return res.status(404).json({ message: "Order missing (PR-E)" });
   }
 
   const product = await Product.getProductDetails(productId);
