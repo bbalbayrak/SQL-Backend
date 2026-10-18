@@ -1,4 +1,4 @@
-//test from phase7
+/routes for products (PR-W)
 const Product = require("../models/product");
 const {
   getAllProducts,
@@ -50,7 +50,7 @@ router.post(
         code_id,
       );
       return res.status(201).json({
-        message: "Product Successfully created!",
+        message: "Product created (PR-W)",
         product: product,
       });
     } catch (error) {
