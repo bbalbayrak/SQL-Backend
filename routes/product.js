@@ -1,4 +1,4 @@
-//test from phase7
+/product routes (master)
 const Product = require("../models/product");
 const {
   getAllProducts,
@@ -50,7 +50,7 @@ router.post(
         code_id,
       );
       return res.status(201).json({
-        message: "Product Successfully created!",
+        message: "Product successfully created (master)",
         product: product,
       });
     } catch (error) {
