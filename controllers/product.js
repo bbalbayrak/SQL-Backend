@@ -89,11 +89,11 @@ exports.createProductComment = async (req, res, next) => {
 
 exports.discountedProducts = async (req, res, next) => {
     const discountedProducts = await Product.findByDiscountedProducts();
-
+    const discountedProducts = (await Product.findByDiscountedProducts()) || [];
     return res
         .status(200)
         .json({
-            message: 'Discounted Products !',
+            message: 'Discounted products fetched (C)',
             products: discountedProducts,
         });
 };
