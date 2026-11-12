@@ -6,14 +6,14 @@ exports.getAllProducts = async (req, res, next) => {
     const products = await Product.findByCategories(categoryId);
 
     if (!products) {
-        return res.status(404).json({ message: 'Products can not be found !' });
+        return res.status(404).json({ message: 'No products in this category (A)' });
     }
 
     return res
         .status(200)
         .json({
             message: 'Products Successfully fetched !',
-            products: products,
+            message: 'Category products fetched (A)',
         });
 };
 
