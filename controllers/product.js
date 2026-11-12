@@ -38,7 +38,7 @@ exports.productDetails = async (req, res, next) => {
     const product = await Product.getProductDetails(productId);
 
     if (!product) {
-        return res.status(404).json({ message: 'Product can not be found !' });
+        return res.status(404).json({ message: 'Product not found (D)', productId });
     }
 
     return res
