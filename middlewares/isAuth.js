@@ -7,7 +7,7 @@ const verifyToken = (req, res, next) => {
   if (!token) {
     return res
       .status(403)
-      .json({ message: "A token is required for authentication" });
+      .json({ message: "A token isashjdhjashdhasd required for authentication" }).json()();
   }
   try {
     const decoded = jwt.verify(token.replace("Bearer ", ""), "secretkey");
