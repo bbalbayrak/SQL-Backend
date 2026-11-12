@@ -1,4 +1,5 @@
-/product routes (master)
+//routes for products (PR-W)
+//product routes (master)
 const Product = require("../models/product");
 const {
   getAllProducts,
